@@ -1,7 +1,9 @@
 package pl.nikowis.insult.service;
 
+import pl.nikowis.insult.dto.SlackInsultResponseDTO;
+
 public interface InsultingService {
 
-    String generateInsult();
+    SlackInsultResponseDTO getInsultResponse();
 
 }

@@ -3,10 +3,11 @@ package pl.nikowis.insult.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.nikowis.insult.dto.SlackInsultResponseDTO;
 import pl.nikowis.insult.service.InsultingService;
 
 @RestController
-public class InsultController {
+public class SlackInsultController {
 
     public static final String INSULT_ENDPOINT = "/insult";
 
@@ -14,8 +15,8 @@ public class InsultController {
     private InsultingService insultingService;
 
     @PostMapping(INSULT_ENDPOINT)
-    public String insult() {
-        return insultingService.generateInsult();
+    public SlackInsultResponseDTO insult() {
+        return insultingService.getInsultResponse();
     }
 
 }

@@ -3,38 +3,45 @@ package pl.nikowis.insult.rest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.nikowis.insult.service.InsultingService;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import pl.nikowis.insult.service.InsultingGenerator;
 
-import static org.hamcrest.core.StringContains.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@SpringBootTest
 class InsultControllerTest {
 
     private String INSULT_VAL = "You are so ugly ...";
 
     @MockBean
-    private InsultingService insultingService;
+    private InsultingGenerator insultingGenerator;
 
     @Autowired
+    private SlackInsultController insultController;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        when(insultingService.generateInsult()).thenReturn(INSULT_VAL);
+        mockMvc = MockMvcBuilders.standaloneSetup(insultController).build();
+        when(insultingGenerator.generateInsult()).thenReturn(INSULT_VAL);
     }
 
     @Test
     void insultEndpointTest() throws Exception {
-        this.mockMvc.perform(post(InsultController.INSULT_ENDPOINT))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(INSULT_VAL)));
+        this.mockMvc.perform(post(SlackInsultController.INSULT_ENDPOINT))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response_type", is(notNullValue())))
+                .andExpect(jsonPath("$.text", is(INSULT_VAL)));
     }
 }

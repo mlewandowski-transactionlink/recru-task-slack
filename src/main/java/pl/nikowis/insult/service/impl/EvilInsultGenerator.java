@@ -2,12 +2,12 @@ package pl.nikowis.insult.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import pl.nikowis.insult.service.InsultingService;
+import pl.nikowis.insult.service.InsultingGenerator;
 
-@Service
-class EvilInsultService implements InsultingService {
+@Component
+class EvilInsultGenerator implements InsultingGenerator {
 
     private String insultGeneratorUrl;
 
@@ -15,7 +15,7 @@ class EvilInsultService implements InsultingService {
     private RestTemplate restTemplate;
 
     @Autowired
-    public EvilInsultService(RestTemplate restTemplate, @Value("${evil.insult.generator.url}") String insultGeneratorUrl) {
+    public EvilInsultGenerator(RestTemplate restTemplate, @Value("${evil.insult.generator.url}") String insultGeneratorUrl) {
         this.restTemplate = restTemplate;
         this.insultGeneratorUrl = insultGeneratorUrl;
     }
