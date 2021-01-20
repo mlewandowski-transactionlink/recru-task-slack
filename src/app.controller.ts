@@ -10,8 +10,7 @@ export class AppController {
   async insultRequest(
     @Body('text') language: string,
   ): Promise<SlackInsultResponseDto> {
-    const lang = language != '' ? language : 'en';
-
+    const lang = language != null && language != '' ? language : 'en';
     return await this.appService
       .getInsults(lang)
       .then((axiosResponse) => ({
