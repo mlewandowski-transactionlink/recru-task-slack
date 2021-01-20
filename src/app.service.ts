@@ -11,7 +11,7 @@ export class AppService {
 
   constructor(private httpService: HttpService) {}
 
-  public getInsults(lang): Promise<AxiosResponse<InsultDto>> {
+  public getInsults(lang): Promise<InsultDto> {
     if (!this.isoLanguages.has(lang)) {
       throw new Error(`${lang} is not a supported language`);
     }
@@ -20,6 +20,7 @@ export class AppService {
       .get(this.insultServiceURL, {
         params: { lang, type: 'json' },
       })
-      .toPromise();
+      .toPromise()
+      .then((axiosResponse) => axiosResponse.data as InsultDto);
   }
 }

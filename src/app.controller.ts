@@ -13,8 +13,8 @@ export class AppController {
     const lang = language != null && language != '' ? language : 'en';
     return await this.appService
       .getInsults(lang)
-      .then((axiosResponse) => ({
-        text: axiosResponse.data.insult,
+      .then((insultDTO) => ({
+        text: insultDTO.insult,
         response_type: 'in_channel',
       }))
       .catch((err) => {
